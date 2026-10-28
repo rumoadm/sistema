@@ -13,9 +13,11 @@ import { applyTheme, getTheme } from './lib/theme'
 
 applyTheme(getTheme())
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={base}>
       <SessionProvider>
         <App />
       </SessionProvider>
