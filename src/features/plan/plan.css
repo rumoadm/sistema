@@ -1,0 +1,127 @@
+.plan h1 {
+  margin: 8px 0 8px;
+  font-size: clamp(32px, 5vw, 44px);
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.plan .lead {
+  max-width: 62ch;
+}
+
+.aside,
+.callout {
+  margin-top: 12px;
+  color: var(--muted);
+  max-width: 68ch;
+}
+
+.callout {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--callout-bg);
+  color: var(--ink);
+  border: 1px solid var(--callout-line);
+}
+
+.steps,
+.docs {
+  list-style: none;
+  margin: 22px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.step,
+.doc {
+  width: 100%;
+  text-align: left;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px;
+}
+
+.step {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.step strong,
+.doc strong {
+  display: block;
+  font-size: 16px;
+}
+
+.step small,
+.doc small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.box {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: var(--box);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.step.done .box {
+  background: var(--menta);
+  color: var(--atlantico);
+}
+
+.step.done strong {
+  color: var(--muted);
+}
+
+.doc {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.status {
+  border: 0;
+  border-radius: 999px;
+  min-height: 40px;
+  padding: 0 14px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  flex: none;
+}
+
+.status-pendente {
+  background: var(--pendente-bg);
+  color: var(--ink);
+}
+
+.status-andamento {
+  background: var(--andamento-bg);
+  color: var(--andamento-ink);
+}
+
+.status-pronto {
+  background: var(--menta);
+  color: var(--atlantico);
+}
+
+@media (max-width: 640px) {
+  .doc {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

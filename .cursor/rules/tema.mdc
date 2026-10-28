@@ -1,0 +1,17 @@
+---
+description: Telas novas do Rumo saem no tema claro e no modo noite
+alwaysApply: true
+---
+
+# Tema claro e modo noite
+
+Toda tela, cartão, campo ou estado novo funciona nos dois temas. O modo noite troca o papel das cores: fundo Atlântico, texto e botão em areia. Menta, âmbar e o logo não invertem.
+
+Use só os tokens de `src/styles/tokens.css`. Cor nova entra lá, com valor claro e valor em `:root[data-theme='dark']`.
+
+- Fundo da página: `--bg`. Texto: `--ink`. Texto secundário: `--muted`.
+- Cartão: `--card`. Menu, barra e campo: `--surface` e `--field-bg`. Borda: `--line`.
+- Botão e item ativo: `--accent` com texto `--on-accent`.
+- Marca fixa, sem trocar no escuro: `--atlantico`, `--areia`, `--menta`, `--amanhecer`.
+
+Evite hex solto no CSS do componente. Painel que precisa continuar azul (a coluna da marca no login) usa `--atlantico` e `--areia` de propósito.
