@@ -1,5 +1,5 @@
 export function Mark() {
-  return <img className="mark" src="/marca.png" alt="" />
+  return <img className="mark" src={`${import.meta.env.BASE_URL}marca.png`} alt="" />
 }
 
 export function Logo({ tone = 'dark' }) {
