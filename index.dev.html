@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="https://rumoadm.github.io/sistema/marca.png" />
+    <link rel="apple-touch-icon" href="https://rumoadm.github.io/sistema/marca.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#F8F7F2" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Rumo" />
+    <meta property="og:title" content="Rumo" />
+    <meta property="og:description" content="Do sonho ao próximo passo." />
+    <meta property="og:url" content="https://rumoadm.github.io/sistema/" />
+    <meta property="og:image" content="https://rumoadm.github.io/sistema/marca.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content="Marca do Rumo" />
+    <script>
+      try {
+        if (localStorage.getItem('rumo.theme.v1') === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark')
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#102F3A')
+        }
+      } catch (error) {}
+    </script>
+    <meta
+      name="description"
+      content="Rumo organiza o plano de mudança para fora do Brasil. Um país, um caminho, o próximo passo."
+    />
+    <title>Rumo</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

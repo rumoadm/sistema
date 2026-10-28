@@ -6,10 +6,9 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
-  administration: write
 
 concurrency:
   group: pages
@@ -17,26 +16,16 @@ concurrency:
 
 jobs:
   deploy:
+    if: github.actor != 'github-actions[bot]'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Publicar o site gerado
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          code=$(curl -sS -o pages.json -w "%{http_code}" -X PUT \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "https://api.github.com/repos/${{ github.repository }}/pages" \
-            -d '{"build_type":"workflow"}')
-          echo "http $code"
-          cat pages.json
-          test "$code" -lt 400
       - name: Baixar o código
         uses: actions/checkout@v4
+        with:
+          ref: main
       - name: Node
         uses: actions/setup-node@v4
         with:
@@ -45,7 +34,24 @@ jobs:
       - name: Instalar
         run: npm ci
       - name: Gerar o site
-        run: npm run build && cp dist/index.html dist/404.html
+        run: |
+          npm run build
+          cp dist/index.dev.html dist/index.html
+          cp dist/index.html dist/404.html
+          rm -rf assets
+          mkdir -p assets
+          cp -r dist/assets/. assets/
+          cp dist/index.html index.html
+          cp dist/404.html 404.html
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html 404.html assets
+          if git diff --cached --quiet; then
+            echo "O site publicado já está atualizado."
+          else
+            git commit -m "Atualiza o site publicado."
+            git push
+          fi
         env:
           GITHUB_PAGES: 'true'
       - name: Enviar os arquivos
