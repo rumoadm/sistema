@@ -6,7 +6,7 @@ import {
   signOut,
 } from 'firebase/auth'
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
-import { createSamplePlan } from '../data/countries/portugal'
+import { createPlan } from '../data/countries'
 import { auth, db } from './firebase'
 
 const listeners = new Set()
@@ -50,7 +50,7 @@ async function toPublic(firebaseUser) {
     phone: data.phone || '',
     email: firebaseUser.email || '',
     emailVerified: firebaseUser.emailVerified,
-    plan: data.plan || createSamplePlan(),
+    plan: data.plan || null,
   }
 }
 
@@ -67,7 +67,7 @@ onAuthStateChanged(auth, async (firebaseUser) => {
           phone: '',
           email: firebaseUser.email || '',
           emailVerified: firebaseUser.emailVerified,
-          plan: createSamplePlan(),
+          plan: null,
         }
       : null
   }
@@ -114,7 +114,7 @@ export async function signup({ firstName, lastName, phone, email, password }) {
       name: `${check.cleanFirst} ${check.cleanLast}`,
       phone: check.digits,
       email: check.cleanEmail,
-      plan: createSamplePlan(),
+      plan: null,
     }
     try {
       await setDoc(userRef(credential.user.uid), profile)
@@ -168,6 +168,23 @@ async function withPlan(change) {
     current = await toPublic(auth.currentUser)
     emit()
     return authMessage(error)
+  }
+}
+
+export async function choosePath(countryCode, pathId) {
+  if (!auth.currentUser || !current) return { ok: false, error: 'Entre de novo para salvar o caminho.' }
+  const plan = createPlan(countryCode, pathId)
+  if (!plan) return { ok: false, error: 'Esse caminho ainda não está disponível.' }
+  const previous = current
+  current = { ...current, plan }
+  emit()
+  try {
+    await updateDoc(userRef(auth.currentUser.uid), { plan })
+    return { ok: true }
+  } catch (error) {
+    current = previous
+    emit()
+    return { ok: false, error: authMessage(error) }
   }
 }
 

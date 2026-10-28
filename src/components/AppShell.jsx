@@ -1,12 +1,13 @@
 import { NavLink } from 'react-router-dom'
 import { firstName } from '../lib/format'
 import { logout } from '../lib/session'
-import { IconCheck, IconFile, IconHome } from './Icons'
+import { IconCheck, IconFile, IconFlag, IconHome } from './Icons'
 import { Logo } from './Logo'
 import { ThemeToggle } from './ThemeToggle'
 
 const links = [
-  { to: '/plano', label: 'Plano', icon: IconHome },
+  { to: '/plano', label: 'Plano', icon: IconHome, end: true },
+  { to: '/paises', label: 'Destino', icon: IconFlag },
   { to: '/checklist', label: 'Checklist', icon: IconCheck },
   { to: '/documentos', label: 'Documentos', icon: IconFile },
 ]
@@ -26,7 +27,7 @@ export function AppShell({ user, children }) {
           {links.map((link) => {
             const Icon = link.icon
             return (
-              <NavLink key={link.to} to={link.to}>
+              <NavLink key={link.to} to={link.to} end={link.end}>
                 <Icon />
                 {link.label}
               </NavLink>
@@ -58,7 +59,7 @@ export function AppShell({ user, children }) {
         {links.map((link) => {
           const Icon = link.icon
           return (
-            <NavLink key={link.to} to={link.to}>
+            <NavLink key={link.to} to={link.to} end={link.end}>
               <Icon />
               {link.label}
             </NavLink>

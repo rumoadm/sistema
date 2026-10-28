@@ -69,7 +69,7 @@ export function SignupPage() {
   return (
     <AuthLayout
       title="Crie sua conta"
-      subtitle="A gente abre um plano de exemplo para Portugal, só para você ver o caminho."
+      subtitle="Depois da conta, você escolhe o país e o caminho. O plano começa por aí."
     >
       <form className="auth-form" onSubmit={onSubmit} noValidate>
         <div className="field-row">

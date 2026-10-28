@@ -52,6 +52,15 @@ export function IconMoon() {
   )
 }
 
+export function IconFlag() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <path d="M5 21V4" strokeLinecap="round" />
+      <path d="M5 4h11l-1.6 4.2L16 12.5H5" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 export function IconFile() {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">

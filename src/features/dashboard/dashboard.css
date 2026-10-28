@@ -69,6 +69,22 @@
   font-weight: 700;
 }
 
+a.dest {
+  display: grid;
+  text-decoration: none;
+  color: inherit;
+}
+
+a.dest:hover {
+  border-color: var(--field-focus);
+}
+
+.dest-change {
+  margin-top: 14px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
 .dest h2,
 .next h2 {
   font-size: 26px;

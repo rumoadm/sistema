@@ -1,13 +1,14 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { pathOf, portugal } from '../../data/countries/portugal'
+import { countryOf, pathOf } from '../../data/countries'
 import { useSession } from '../../app/useSession.jsx'
-import { greeting } from '../../lib/format'
+import { greeting, reviewedOn } from '../../lib/format'
 import { planStats } from '../../lib/session'
 import './dashboard.css'
 
 export function DashboardPage() {
   const user = useSession()
+  const country = countryOf(user.plan.countryCode)
   const path = pathOf(user.plan)
   const stats = planStats(user.plan, path)
 
@@ -19,7 +20,7 @@ export function DashboardPage() {
     <div className="page dash">
       <p className="eyebrow">Plano geral</p>
       <h1>{greeting(user.name)}.</h1>
-      <p className="lead">Sua jornada está ficando mais organizada.</p>
+      <p className="lead">{path.summary}</p>
 
       <section className="stats" aria-label="Resumo do plano">
         <article className="card">
@@ -34,21 +35,22 @@ export function DashboardPage() {
           </div>
         </article>
 
-        <article className="card dest">
-          <p className="eyebrow">Destino de exemplo</p>
+        <Link className="card dest" to="/paises">
+          <p className="eyebrow">Seu destino</p>
           <p className="codes">
-            <b>{portugal.from}</b>
+            <b>{country.from}</b>
             <span aria-hidden="true">→</span>
-            <b>{portugal.code}</b>
+            <b>{country.code}</b>
           </p>
-          <h2>{portugal.name}</h2>
+          <h2>{country.name}</h2>
           <p>{path.name}</p>
-        </article>
+          <span className="dest-change">Trocar destino</span>
+        </Link>
 
         <article className="card next">
           <p className="eyebrow">Seu próximo passo</p>
           <h2>{stats.next ? stats.next.title : 'Checklist em dia'}</h2>
-          <p>{stats.next ? stats.next.detail : 'Os passos deste exemplo estão concluídos.'}</p>
+          <p>{stats.next ? stats.next.detail : 'Os passos deste caminho estão concluídos.'}</p>
           <Link className="btn" to="/checklist">
             Abrir checklist
           </Link>
@@ -60,7 +62,9 @@ export function DashboardPage() {
         <ul>
           <li className="on">
             <b>Primeira rota</b>
-            <span>Portugal, trabalho remoto</span>
+            <span>
+              {country.name}, {path.name.toLowerCase()}
+            </span>
           </li>
           <li className={stats.documentsReady ? 'on' : ''}>
             <b>Documentos em ordem</b>
@@ -74,12 +78,12 @@ export function DashboardPage() {
       </section>
 
       <p className="notice">
-        O Rumo organiza o seu plano. Não promete visto e não substitui um advogado. Portugal aqui é um exemplo
-        para validar o fluxo. Confira as regras no{' '}
+        O Rumo organiza o seu plano. Não promete visto e não substitui um advogado. Confira as regras no{' '}
         <a href={path.official.url} target="_blank" rel="noopener noreferrer">
           {path.official.label}
         </a>
-        .
+        {path.official.reviewed ? `, fonte conferida em ${reviewedOn(path.official.reviewed)}` : ''}. Trocar o
+        destino zera o checklist e os documentos.
       </p>
     </div>
   )

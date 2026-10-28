@@ -14,6 +14,17 @@ export function greeting(name) {
   return `${hello}, ${firstName(name)}`
 }
 
+export function reviewedOn(iso) {
+  if (!iso) return ''
+  const [year, month, day] = iso.split('-').map(Number)
+  if (!year || !month || !day) return ''
+  return new Date(year, month - 1, day).toLocaleDateString('pt-BR', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  })
+}
+
 export const DOC_STATUS = {
   pendente: 'Pendente',
   andamento: 'Em andamento',

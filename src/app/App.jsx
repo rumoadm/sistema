@@ -3,6 +3,7 @@ import { AppShell } from '../components/AppShell'
 import { ForgotPage } from '../features/auth/ForgotPage'
 import { LoginPage } from '../features/auth/LoginPage'
 import { SignupPage } from '../features/auth/SignupPage'
+import { CountriesPage } from '../features/countries/CountriesPage'
 import { DashboardPage } from '../features/dashboard/DashboardPage'
 import { ChecklistPage } from '../features/plan/ChecklistPage'
 import { DocumentsPage } from '../features/plan/DocumentsPage'
@@ -28,6 +29,12 @@ function Private() {
       <Outlet />
     </AppShell>
   )
+}
+
+function Planned() {
+  const { user } = useSessionState()
+  if (!user?.plan?.countryCode) return <Navigate to="/paises" replace />
+  return <Outlet />
 }
 
 export default function App() {
@@ -58,9 +65,14 @@ export default function App() {
         }
       />
       <Route element={<Private />}>
-        <Route path="/plano" element={<DashboardPage />} />
-        <Route path="/checklist" element={<ChecklistPage />} />
-        <Route path="/documentos" element={<DocumentsPage />} />
+        <Route path="/paises" element={<CountriesPage />} />
+        <Route path="/paises/:code/sobre" element={<CountriesPage />} />
+        <Route path="/paises/:code" element={<CountriesPage />} />
+        <Route element={<Planned />}>
+          <Route path="/plano" element={<DashboardPage />} />
+          <Route path="/checklist" element={<ChecklistPage />} />
+          <Route path="/documentos" element={<DocumentsPage />} />
+        </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
