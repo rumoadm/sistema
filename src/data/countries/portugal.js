@@ -3,10 +3,7 @@ export const portugal = {
   name: 'Portugal',
   from: 'BR',
   cover: 'paises/portugal.jpg',
-  coverAlt: 'Lisboa vista do Castelo de São Jorge, com o Tejo e os telhados da Alfama.',
-  coverCredit: 'Jakub Hałun, CC BY 4.0',
-  coverUrl:
-    'https://commons.wikimedia.org/wiki/File:Lisbon_Alfama_Sao_Vicente_Pantheon_from_Sao_Jorge_Castle,_20250604_1714_9404.jpg',
+  coverAlt: 'A Alfama ao pôr do sol, com o Tejo e a Ponte 25 de Abril ao fundo.',
   line: 'Para organizar a mudança com um caminho só, em vez de uma lista solta de papéis.',
   about:
     'Para quem quer sair do Brasil e organizar a mudança com um caminho só. Hoje há trabalho remoto, para quem já trabalha para fora de Portugal, e estudo, para quem tem uma instituição em vista. O plano começa pelo passaporte. Não promete visto.',
@@ -15,10 +12,7 @@ export const portugal = {
     title: 'Portugal, mais perto da sua realidade.',
     lead: 'Conheça o destino antes de decidir o próximo passo.',
     image: 'paises/portugal.jpg',
-    imageAlt: 'Lisboa vista do Castelo de São Jorge, com o Tejo e os telhados da Alfama.',
-    credit: 'Foto: Jakub Hałun, CC BY 4.0',
-    creditUrl:
-      'https://commons.wikimedia.org/wiki/File:Lisbon_Alfama_Sao_Vicente_Pantheon_from_Sao_Jorge_Castle,_20250604_1714_9404.jpg',
+    imageAlt: 'A Alfama ao pôr do sol, com o Tejo e a Ponte 25 de Abril ao fundo.',
     sections: [
       {
         id: 'gente',
