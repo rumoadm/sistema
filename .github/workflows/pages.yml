@@ -38,14 +38,15 @@ jobs:
           npm run build
           cp dist/index.dev.html dist/index.html
           cp dist/index.html dist/404.html
-          rm -rf assets
-          mkdir -p assets
+          rm -rf assets paises
+          mkdir -p assets paises
           cp -r dist/assets/. assets/
+          cp -r dist/paises/. paises/
           cp dist/index.html index.html
           cp dist/404.html 404.html
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html 404.html assets
+          git add index.html 404.html assets paises
           if git diff --cached --quiet; then
             echo "O site publicado já está atualizado."
           else
