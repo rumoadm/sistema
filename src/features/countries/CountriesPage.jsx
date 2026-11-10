@@ -3,7 +3,6 @@ import { Link, Navigate, useMatch, useNavigate, useParams } from 'react-router-d
 import { useSession } from '../../app/useSession.jsx'
 import { Flag } from '../../components/Flag'
 import { countries, countryOf, pathOf } from '../../data/countries'
-import { reviewedOn } from '../../lib/format'
 import { choosePath } from '../../lib/session'
 import './countries.css'
 
@@ -26,7 +25,9 @@ export function CountriesPage() {
 
   return (
     <div className="page countries">
-      <h1>Para qual desses países você gostaria de se mudar?</h1>
+      <p className="lane-tag">Explorar países</p>
+      <h1>Qual país faz sentido para você?</h1>
+      <p className="lead">Conheça os destinos e escolha por onde começar.</p>
       {current && currentPath ? (
         <p className="current-plan">
           Seu plano agora é {current.name}, {currentPath.name.toLowerCase()}.{' '}
@@ -37,19 +38,22 @@ export function CountriesPage() {
       <div className="country-pick">
         {countries.map((item) => (
           <article key={item.code} className={current?.code === item.code ? 'country-option on' : 'country-option'}>
-            <Flag code={item.code} />
-            <h2>{item.name}</h2>
-            <div className="country-actions">
-              <Link className="btn ghost" to={`/paises/${item.code}/sobre`}>
-                Entender mais sobre o país
-              </Link>
-              <Link className="btn" to={`/paises/${item.code}`}>
-                Escolher este
-              </Link>
+            <img
+              className="country-cover"
+              src={`${import.meta.env.BASE_URL}${item.cover}`}
+              alt={item.coverAlt}
+            />
+            <div className="country-heading">
+              <Flag code={item.code} />
+              <h2>{item.name}</h2>
             </div>
+            <Link className="btn" to={`/paises/${item.code}/sobre`}>
+              Ver esse destino
+            </Link>
           </article>
         ))}
       </div>
+      <p className="pick-note">Você pode explorar antes de decidir.</p>
     </div>
   )
 }
@@ -171,10 +175,7 @@ function CountryAbout({ country }) {
 
   return (
     <div className="page countries">
-      <span className="flag-hero">
-        <Flag code={country.code} />
-      </span>
-      <h1>{country.name}</h1>
+      <CountryTitle country={country} />
       <p className="lead">{country.about}</p>
       {country.paths.length ? (
         <div className="path-grid">
@@ -188,93 +189,84 @@ function CountryAbout({ country }) {
           ))}
         </div>
       ) : null}
-      <AboutActions code={country.code} />
+      <AboutActions />
     </div>
   )
 }
 
 function CountryPortrait({ country }) {
   const { portrait } = country
-  const [openId, setOpenId] = useState(portrait.sections[0].id)
+  const [openId, setOpenId] = useState(null)
+  const [popupId, setPopupId] = useState(null)
   const [placeId, setPlaceId] = useState(null)
+  const places = portrait.sections.find((item) => item.places)?.places || []
+  const place = places.find((item) => item.id === placeId) || null
+  const popup = portrait.sections.find((item) => item.id === popupId) || null
 
   return (
     <div className="page countries">
-      <AboutSwitch code={country.code} current="sobre" />
       <figure className="place">
         <img src={`${import.meta.env.BASE_URL}${portrait.image}`} alt={portrait.imageAlt} />
-        <figcaption>
-          Lisboa, vista do Castelo de São Jorge.{' '}
-          <a href={portrait.creditUrl} target="_blank" rel="noopener noreferrer">
-            {portrait.credit}
-          </a>
-        </figcaption>
+        <div className="place-shade" aria-hidden="true" />
+        <div className="place-bar">
+          <div className="place-name">
+            <Flag code={country.code} />
+            <h1>{country.name}</h1>
+          </div>
+          <Link className="btn" to={`/paises/${country.code}`}>
+            Escolher este país
+          </Link>
+        </div>
       </figure>
-      <p className="lane-tag">Para entender</p>
-      <h1>{portrait.title}</h1>
-      <p className="lead">{portrait.lead}</p>
 
       <section className="topic-list" aria-label="Explore a vida no país">
         <h2>Explore a vida no país</h2>
-        {portrait.sections.map((item) => {
-          const open = item.id === openId
-          return (
-            <div key={item.id} className={open ? 'topic-block on' : 'topic-block'}>
-              <button
-                type="button"
-                className={open ? 'topic on' : 'topic'}
-                aria-expanded={open}
-                aria-controls={`tema-${item.id}`}
-                onClick={() => setOpenId(open ? null : item.id)}
-              >
-                <TopicIcon id={item.id} />
-                <span>{item.title}</span>
-                <span className="chev" aria-hidden="true" />
-              </button>
-              {open ? (
-                <article className="portrait-detail" id={`tema-${item.id}`}>
-                  {item.places?.length ? (
-                    <PlaceFilter
-                      places={item.places}
-                      placeId={placeId}
-                      onPick={setPlaceId}
-                      source={item.sources.find((source) => source.label === 'GEE, 2021')}
-                      reviewed={portrait.reviewed}
-                    />
-                  ) : null}
-                  {placeId && item.places?.length ? null : (
-                    <>
-                      <p className="detail-kicker">{item.kicker}</p>
-                      <strong>{item.value}</strong>
-                      <span>{item.label}</span>
-                      {item.share ? <p className="detail-share">{item.share}</p> : null}
-                      <p>{item.text}</p>
-                      {item.sources.length ? (
-                        <p className="detail-source">
-                          Fonte, conferida em {reviewedOn(portrait.reviewed)}:{' '}
-                          {item.sources.map((source, index) => (
-                            <span key={source.url}>
-                              {index ? ' · ' : null}
-                              <a href={source.url} target="_blank" rel="noopener noreferrer">
-                                {source.label}
-                              </a>
-                            </span>
-                          ))}
-                        </p>
-                      ) : (
-                        <p className="detail-source">Conferido em {reviewedOn(portrait.reviewed)}.</p>
-                      )}
-                      {item.places?.some((place) => place.video) ? (
-                        <VideoCarousel places={item.places} />
-                      ) : null}
-                    </>
-                  )}
-                </article>
-              ) : null}
-            </div>
-          )
-        })}
+        <div className="district-filter">
+          <label className="district-label" htmlFor="filtro-cidade">
+            Visualize
+          </label>
+          <select
+            id="filtro-cidade"
+            className="district-select"
+            value={placeId || ''}
+            onChange={(event) => setPlaceId(event.target.value || null)}
+          >
+            <option value="">País inteiro</option>
+            {places.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.featured ? `${item.name} — em destaque` : item.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="fact-cards">
+          {portrait.sections.map((item, index) => {
+            const asPopup = index < 4
+            return (
+              <FactCard
+                key={item.id}
+                item={item}
+                place={place}
+                popup={asPopup}
+                open={!asPopup && item.id === openId}
+                onToggle={
+                  hasDetail(item)
+                    ? () => {
+                        if (asPopup) setPopupId(item.id)
+                        else setOpenId(item.id === openId ? null : item.id)
+                      }
+                    : null
+                }
+              />
+            )
+          })}
+        </div>
       </section>
+      {popup ? (
+        <FactDialog key={popup.id} title={popup.title} onClose={() => setPopupId(null)}>
+          <FactExtra item={popup} place={place} />
+        </FactDialog>
+      ) : null}
 
       <section className="follow">
         <div>
@@ -283,51 +275,234 @@ function CountryPortrait({ country }) {
           <p>Ao escolher {country.name}, o próximo passo olha o que você já tem e o que falta.</p>
         </div>
         <Link className="btn" to={`/paises/${country.code}`}>
-          Escolher este
+          Escolher este país
         </Link>
       </section>
     </div>
   )
 }
 
-function PlaceFilter({ places, placeId, onPick, source, reviewed }) {
-  const place = places.find((item) => item.id === placeId)
+function FactCard({ item, place, open, onToggle, popup }) {
+  const face = cardFace(item, place)
+  const quiet = titleOnly(item)
+  const summary = (
+    <>
+      <span className="fact-title">
+        <TopicIcon id={item.id} />
+        {item.title}
+      </span>
+      {onToggle ? (
+        <span className="chev" aria-hidden="true">
+          <svg viewBox="0 0 12 12" width="16" height="16">
+            <path
+              d="M2.5 4.5 6 8l3.5-3.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+      ) : null}
+      {quiet || item.prices ? null : (
+        <>
+          <strong>{face.value}</strong>
+          {face.label ? <span className="fact-label">{face.label}</span> : null}
+        </>
+      )}
+      {onToggle && !open ? <span className="fact-hint">Clique para mais infos</span> : null}
+    </>
+  )
 
   return (
-    <div className="district-filter">
-      <label className="district-label" htmlFor="filtro-cidade">
-        Filtre por cidade
-      </label>
-      <select
-        id="filtro-cidade"
-        className="district-select"
-        value={placeId || ''}
-        onChange={(event) => onPick(event.target.value || null)}
-      >
-        <option value="">Escolha uma cidade</option>
-        {places.map((item) => (
-          <option key={item.id} value={item.id}>
-            {item.featured ? `${item.name} — em destaque` : item.name}
-          </option>
-        ))}
-      </select>
-      {place ? (
-        <div className="district-card">
-          <strong>{place.value}</strong>
-          <span className="district-count">residentes brasileiros no distrito, em 2021</span>
-          <p>{place.share}</p>
-          {place.text ? <p>{place.text}</p> : null}
-          {place.video ? <VideoCard name={place.name} url={place.video} /> : null}
-          {source ? (
-            <p className="detail-source">
-              Fonte, conferida em {reviewedOn(reviewed)}:{' '}
-              <a href={source.url} target="_blank" rel="noopener noreferrer">
-                {source.label}
-              </a>
-            </p>
-          ) : null}
+    <article className={['fact-card', quiet ? 'quiet' : '', open ? 'on' : ''].filter(Boolean).join(' ')}>
+      {onToggle ? (
+        <button
+          type="button"
+          className="fact-toggle"
+          aria-expanded={popup ? undefined : open}
+          aria-haspopup={popup ? 'dialog' : undefined}
+          onClick={onToggle}
+        >
+          {summary}
+        </button>
+      ) : (
+        <div className="fact-toggle">{summary}</div>
+      )}
+      {!quiet && item.prices ? <PriceCompare kicker={item.kicker} prices={item.prices} /> : null}
+      {open && !popup ? (
+        <div className="fact-extra">
+          <FactExtra item={item} place={place} />
         </div>
       ) : null}
+    </article>
+  )
+}
+
+function FactDialog({ title, onClose, children }) {
+  const ref = useRef(null)
+  const closeRef = useRef(onClose)
+
+  useEffect(() => {
+    closeRef.current = onClose
+  }, [onClose])
+
+  useEffect(() => {
+    const dialog = ref.current
+    if (!dialog) return
+    dialog.showModal()
+    function onCancel(event) {
+      event.preventDefault()
+      closeRef.current()
+    }
+    dialog.addEventListener('cancel', onCancel)
+    return () => {
+      dialog.removeEventListener('cancel', onCancel)
+      if (dialog.open) dialog.close()
+    }
+  }, [])
+
+  return (
+    <dialog
+      className="fact-dialog"
+      ref={ref}
+      aria-label={title}
+      onClick={(event) => {
+        if (event.target === ref.current) closeRef.current()
+      }}
+    >
+      <header>
+        <h2>{title}</h2>
+        <button type="button" className="fact-close" onClick={() => closeRef.current()} aria-label="Fechar">
+          <svg viewBox="0 0 12 12" width="14" height="14" aria-hidden="true">
+            <path d="M2 2l8 8M10 2 2 10" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
+        </button>
+      </header>
+      <div className="fact-dialog-body">{children}</div>
+    </dialog>
+  )
+}
+
+function FactExtra({ item, place }) {
+  if (item.places?.length && place) {
+    return (
+      <>
+        <p className="br-line">
+          <Flag code="BR" />
+          <strong>{place.value}</strong>
+          <span>brasileiros</span>
+        </p>
+        <p className="detail-share">
+          {place.share} Em 2021.
+        </p>
+        {place.text ? <p>{place.text}</p> : null}
+        {place.video ? <VideoCard name={place.name} url={place.video} /> : null}
+      </>
+    )
+  }
+  if (item.id === 'clima') return <p>{place?.climate?.text || item.text}</p>
+  if (item.prices?.length) return <PriceCompare kicker={item.kicker} prices={item.prices} />
+  if (item.bars?.length) return <JobBars kicker={item.kicker} bars={item.bars} note={item.barsNote} />
+  if (titleOnly(item)) {
+    return (
+      <>
+        {item.kicker ? <p className="detail-kicker">{item.kicker}</p> : null}
+        {item.value ? <strong>{item.value}</strong> : null}
+        {item.label ? <span className="fact-label">{item.label}</span> : null}
+        {item.text ? <p>{item.text}</p> : null}
+      </>
+    )
+  }
+  return (
+    <>
+      {item.side ? (
+        <p className="br-line">
+          <Flag code="BR" />
+          <strong>{item.side}</strong>
+          <span>{item.sideLabel}</span>
+        </p>
+      ) : null}
+      {item.share ? <p className="detail-share">{item.share}</p> : null}
+      {item.text ? <p>{item.text}</p> : null}
+      {item.places?.some((spot) => spot.video) ? <VideoCarousel places={item.places} /> : null}
+    </>
+  )
+}
+
+function cardFace(item, place) {
+  if (item.id === 'clima' && place?.climate) {
+    return { value: place.climate.value, label: place.climate.label }
+  }
+  if (item.places?.length && place) {
+    return { value: place.population, label: 'população do distrito' }
+  }
+  if (item.bars?.length) return { value: item.bars[0].share, label: item.kicker }
+  return { value: item.value, label: item.label }
+}
+
+function hasDetail(item) {
+  return titleOnly(item) || Boolean(item.text || item.bars?.length || item.places?.length || item.side)
+}
+
+function titleOnly(item) {
+  return item.id === 'casa' || item.id === 'oficio' || item.id === 'compra' || item.id === 'chegada'
+}
+
+function CountryTitle({ country }) {
+  return (
+    <header className="country-title">
+      <Flag code={country.code} />
+      <h1>{country.name}</h1>
+      <Link className="btn" to={`/paises/${country.code}`}>
+        Escolher este país
+      </Link>
+    </header>
+  )
+}
+
+function PriceCompare({ kicker, prices }) {
+  return (
+    <div className="price-compare">
+      <p className="detail-kicker">{kicker}</p>
+      <div className="price-pair">
+        {prices.map((item) => (
+          <div className="price-side" key={item.code}>
+            <Flag code={item.code} />
+            <strong>{item.value}</strong>
+            {item.note ? (
+              <span className="price-note">
+                {item.note.split('\n').map((line) => (
+                  <span key={line}>{line}</span>
+                ))}
+              </span>
+            ) : null}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function JobBars({ kicker, bars, note }) {
+  return (
+    <div className="job-chart">
+      {kicker ? <p className="detail-kicker">{kicker}</p> : null}
+      <ul className="job-bars">
+        {bars.map((bar) => (
+          <li key={bar.label}>
+            <span className="job-bar-label">
+              <span>{bar.label}</span>
+              <span>{bar.share}</span>
+            </span>
+            <span className="job-track">
+              <span className="job-fill" style={{ width: `${bar.value}%` }} />
+            </span>
+          </li>
+        ))}
+      </ul>
+      {note ? <p>{note}</p> : null}
     </div>
   )
 }
@@ -402,9 +577,6 @@ function AboutSwitch({ code, current }) {
       <Link to={`/paises/${code}/sobre`} aria-current={current === 'sobre' ? 'page' : undefined}>
         Entender mais sobre o país
       </Link>
-      <Link to={`/paises/${code}`} aria-current={current === 'escolher' ? 'page' : undefined}>
-        Escolher este
-      </Link>
     </nav>
   )
 }
@@ -419,6 +591,14 @@ function TopicIcon({ id }) {
     strokeWidth: 1.8,
     'aria-hidden': true,
   }
+  if (id === 'clima') {
+    return (
+      <svg {...common}>
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.1 5.1l1.6 1.6M17.3 17.3l1.6 1.6M18.9 5.1l-1.6 1.6M6.7 17.3l-1.6 1.6" strokeLinecap="round" />
+      </svg>
+    )
+  }
   if (id === 'casa') {
     return (
       <svg {...common}>
@@ -431,6 +611,15 @@ function TopicIcon({ id }) {
       <svg {...common}>
         <rect x="3" y="7" width="18" height="12" rx="2" />
         <path d="M8 7V5h8v2M12 11v4" strokeLinecap="round" />
+      </svg>
+    )
+  }
+  if (id === 'compra') {
+    return (
+      <svg {...common}>
+        <path d="M12 3v16M7 19h10" strokeLinecap="round" />
+        <path d="M12 6 7 7.2 5 13a3.2 3.2 0 0 0 6.4 0z" strokeLinejoin="round" />
+        <path d="M12 6l5 1.2L19 13a3.2 3.2 0 0 1-6.4 0z" strokeLinejoin="round" />
       </svg>
     )
   }
@@ -467,12 +656,9 @@ function TopicIcon({ id }) {
   )
 }
 
-function AboutActions({ code }) {
+function AboutActions() {
   return (
     <div className="country-actions about-actions">
-      <Link className="btn" to={`/paises/${code}`}>
-        Escolher este
-      </Link>
       <Link className="btn ghost" to="/paises">
         Ver os países
       </Link>

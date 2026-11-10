@@ -3,6 +3,7 @@ const flags = {
   PT: FlagPT,
   IT: FlagIT,
   PY: FlagPY,
+  BR: FlagBR,
 }
 
 export function Flag({ code }) {
@@ -12,6 +13,17 @@ export function Flag({ code }) {
     <span className="flag">
       <Draw />
     </span>
+  )
+}
+
+function FlagBR() {
+  return (
+    <svg viewBox="0 0 140 98" role="img" aria-label="Bandeira do Brasil">
+      <rect width="140" height="98" fill="#009C3B" />
+      <polygon points="70,8 132,49 70,90 8,49" fill="#FFDF00" />
+      <circle cx="70" cy="49" r="20" fill="#002776" />
+      <path d="M52 56c12-14 26-14 36 0" fill="none" stroke="#fff" strokeWidth="3.5" />
+    </svg>
   )
 }
 

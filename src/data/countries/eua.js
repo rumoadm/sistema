@@ -2,6 +2,11 @@ export const eua = {
   code: 'US',
   name: 'Estados Unidos',
   from: 'BR',
+  cover: 'paises/eua.jpg',
+  coverAlt: 'Manhattan visto da Ilha da Liberdade.',
+  coverCredit: 'Percival Kestreltail, CC BY-SA 3.0',
+  coverUrl:
+    'https://commons.wikimedia.org/wiki/File:Lower_Manhattan,_New_York_skyline_from_Liberty_Island_2021.jpg',
   line: 'Para separar estudo de trabalho antes de tratar um visto de turismo como se fosse mudança.',
   about:
     'Para quem quer separar estudo de trabalho. O estudo é para quem tem uma escola aprovada nos Estados Unidos. O trabalho remoto não tem um visto próprio: a página oficial mostra as categorias que existem, e a maior parte pede uma empresa no país. O plano começa pelo passaporte. Não promete visto.',

@@ -2,6 +2,10 @@ export const paraguai = {
   code: 'PY',
   name: 'Paraguai',
   from: 'BR',
+  cover: 'paises/paraguai.jpg',
+  coverAlt: 'Palácio de los López, em Assunção.',
+  coverCredit: 'MosheA, CC0',
+  coverUrl: 'https://commons.wikimedia.org/wiki/File:Palacio_de_los_L%C3%B3pez_Asunci%C3%B3n_1.jpg',
   line: 'Para quem é do Brasil e começa pela residência temporária do Mercosul.',
   about:
     'Para quem é do Brasil e quer organizar a mudança pela residência temporária do Mercosul. Trabalho remoto e estudo usam esse primeiro pedido. A prova da atividade entra depois, na residência permanente. O plano começa pelo passaporte. Não promete residência.',

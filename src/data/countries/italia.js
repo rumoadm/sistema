@@ -2,6 +2,10 @@ export const italia = {
   code: 'IT',
   name: 'Itália',
   from: 'BR',
+  cover: 'paises/italia.jpg',
+  coverAlt: 'Roma, com a cúpula de Sant’Ivo.',
+  coverCredit: 'Nhartmannphotos, CC BY-SA 4.0',
+  coverUrl: 'https://commons.wikimedia.org/wiki/File:Rome_skyline_and_Sant%27Ivo.jpg',
   line: 'Para separar trabalho remoto de estudo antes de marcar qualquer atendimento.',
   about:
     'Para quem quer separar trabalho remoto de estudo antes de marcar um atendimento. O remoto é para quem já trabalha de longe, em atividade qualificada. O estudo é para quem tem uma instituição italiana em vista. O plano começa pelo passaporte. Não promete visto.',
