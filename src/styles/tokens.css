@@ -29,6 +29,7 @@
   --andamento-ink: #6a3d12;
   --shadow: 0 1px 2px rgba(16, 47, 58, 0.04), 0 18px 40px -28px rgba(16, 47, 58, 0.45);
   --font: 'Inter', system-ui, sans-serif;
+  --font-title: 'Fraunces', Georgia, serif;
   --radius: 22px;
   color-scheme: light;
 }

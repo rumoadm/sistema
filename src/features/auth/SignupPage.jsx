@@ -119,7 +119,7 @@ export function SignupPage() {
       </form>
       <p className="local-note">A conta abre no celular e no computador.</p>
       <p className="auth-links">
-        <Link to="/">Já tem conta? Entrar</Link>
+        <Link to="/entrar">Já tem conta? Entrar</Link>
       </p>
     </AuthLayout>
   )

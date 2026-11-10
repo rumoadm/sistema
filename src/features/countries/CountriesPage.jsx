@@ -16,7 +16,7 @@ export function CountriesPage() {
     document.title = country ? `${country.name} · Rumo` : 'Destino · Rumo'
   }, [country])
 
-  if (code && !country) return <Navigate to="/paises" replace />
+  if (code && !country) return <Navigate to={user ? '/paises' : '/'} replace />
   if (country && about) return <CountryAbout country={country} />
   if (country) return <PathChoice user={user} country={country} />
 
@@ -194,7 +194,12 @@ function CountryAbout({ country }) {
   )
 }
 
+function chooseLink(user, country) {
+  return user ? `/paises/${country.code}` : '/cadastro'
+}
+
 function CountryPortrait({ country }) {
+  const user = useSession()
   const { portrait } = country
   const [openId, setOpenId] = useState(null)
   const [popupId, setPopupId] = useState(null)
@@ -213,7 +218,7 @@ function CountryPortrait({ country }) {
             <Flag code={country.code} />
             <h1>{country.name}</h1>
           </div>
-          <Link className="btn" to={`/paises/${country.code}`}>
+          <Link className="btn" to={chooseLink(user, country)}>
             Escolher este país
           </Link>
         </div>
@@ -274,7 +279,7 @@ function CountryPortrait({ country }) {
           <h2>Seu plano começa pela sua história.</h2>
           <p>Ao escolher {country.name}, o próximo passo olha o que você já tem e o que falta.</p>
         </div>
-        <Link className="btn" to={`/paises/${country.code}`}>
+        <Link className="btn" to={chooseLink(user, country)}>
           Escolher este país
         </Link>
       </section>
@@ -451,11 +456,12 @@ function titleOnly(item) {
 }
 
 function CountryTitle({ country }) {
+  const user = useSession()
   return (
     <header className="country-title">
       <Flag code={country.code} />
       <h1>{country.name}</h1>
-      <Link className="btn" to={`/paises/${country.code}`}>
+      <Link className="btn" to={chooseLink(user, country)}>
         Escolher este país
       </Link>
     </header>
@@ -657,9 +663,10 @@ function TopicIcon({ id }) {
 }
 
 function AboutActions() {
+  const user = useSession()
   return (
     <div className="country-actions about-actions">
-      <Link className="btn ghost" to="/paises">
+      <Link className="btn ghost" to={user ? '/paises' : { pathname: '/', hash: '#destinos' }}>
         Ver os países
       </Link>
     </div>

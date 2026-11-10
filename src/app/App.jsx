@@ -5,6 +5,8 @@ import { LoginPage } from '../features/auth/LoginPage'
 import { SignupPage } from '../features/auth/SignupPage'
 import { CountriesPage } from '../features/countries/CountriesPage'
 import { DashboardPage } from '../features/dashboard/DashboardPage'
+import { LandingPage } from '../features/landing/LandingPage'
+import { SiteFrame } from '../features/landing/Site'
 import { ChecklistPage } from '../features/plan/ChecklistPage'
 import { DocumentsPage } from '../features/plan/DocumentsPage'
 import { useSessionState } from './useSession.jsx'
@@ -23,11 +25,28 @@ function Guest({ children }) {
 function Private() {
   const { user, ready } = useSessionState()
   if (!ready) return <Loading />
-  if (!user) return <Navigate to="/" replace />
+  if (!user) return <Navigate to="/entrar" replace />
   return (
     <AppShell user={user}>
       <Outlet />
     </AppShell>
+  )
+}
+
+function Open() {
+  const { user, ready } = useSessionState()
+  if (!ready) return <Loading />
+  if (user) {
+    return (
+      <AppShell user={user}>
+        <Outlet />
+      </AppShell>
+    )
+  }
+  return (
+    <SiteFrame>
+      <Outlet />
+    </SiteFrame>
   )
 }
 
@@ -40,8 +59,9 @@ function Planned() {
 export default function App() {
   return (
     <Routes>
+      <Route path="/" element={<LandingPage />} />
       <Route
-        path="/"
+        path="/entrar"
         element={
           <Guest>
             <LoginPage />
@@ -64,9 +84,11 @@ export default function App() {
           </Guest>
         }
       />
+      <Route element={<Open />}>
+        <Route path="/paises/:code/sobre" element={<CountriesPage />} />
+      </Route>
       <Route element={<Private />}>
         <Route path="/paises" element={<CountriesPage />} />
-        <Route path="/paises/:code/sobre" element={<CountriesPage />} />
         <Route path="/paises/:code" element={<CountriesPage />} />
         <Route element={<Planned />}>
           <Route path="/plano" element={<DashboardPage />} />

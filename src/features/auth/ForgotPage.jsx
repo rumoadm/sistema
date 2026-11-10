@@ -36,7 +36,7 @@ export function ForgotPage() {
         </form>
       )}
       <p className="auth-links">
-        <Link to="/">Voltar para entrar</Link>
+        <Link to="/entrar">Voltar para entrar</Link>
       </p>
     </AuthLayout>
   )

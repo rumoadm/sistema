@@ -19,7 +19,7 @@ export function LoginPage() {
   return (
     <AuthLayout
       minimal
-      title="Entre no seu plano"
+      title="Volte ao seu plano"
       subtitle="A mesma conta abre no celular e no computador."
     >
       <form className="auth-form" onSubmit={onSubmit} noValidate>

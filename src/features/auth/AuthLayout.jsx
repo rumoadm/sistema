@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { Logo } from '../../components/Logo'
 import './auth.css'
 
@@ -9,7 +10,9 @@ export function AuthLayout({ title, subtitle, children, minimal = false }) {
   return (
     <div className={minimal ? 'auth auth-minimal' : 'auth'}>
       <aside className="auth-brand">
-        <Logo tone="light" />
+        <Link className="auth-home" to="/">
+          <Logo tone="light" />
+        </Link>
         <div className="auth-brand-copy">
           <p className="auth-kicker">Do sonho ao próximo passo.</p>
           <h1>Um país. Um caminho. O que fazer agora.</h1>
